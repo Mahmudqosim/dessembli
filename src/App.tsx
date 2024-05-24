@@ -1,40 +1,37 @@
-import { useEffect, useState } from "react";
-import type { Schema } from "../amplify/data/resource";
-import { generateClient } from "aws-amplify/data";
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import NotFound from "./views/NotFound"
+import DashboardLayout from "./layouts/DashboardLayout"
+// import AuthLayout from "./layouts/AuthLayout"
+import Dashboard from "./views/Dashboard"
+import { Hub } from 'aws-amplify/utils';
 
-const client = generateClient<Schema>();
+Hub.listen('auth', ({ payload }) => {
+  switch (payload.event) {
+    case 'signedIn':
+      window.location.reload()
+      break;
+    case 'signedOut':
+      window.location.reload()
+      break;
+  }
+});
 
 function App() {
-  const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-
-  useEffect(() => {
-    client.models.Todo.observeQuery().subscribe({
-      next: (data) => setTodos([...data.items]),
-    });
-  }, []);
-
-  function createTodo() {
-    client.models.Todo.create({ content: window.prompt("Todo content") });
-  }
-
   return (
-    <main>
-      <h1>My todos</h1>
-      <button onClick={createTodo}>+ new</button>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>{todo.content}</li>
-        ))}
-      </ul>
-      <div>
-        🥳 App successfully hosted. Try creating a new todo.
-        <br />
-        <a href="https://docs.amplify.aws/react/start/quickstart/#make-frontend-updates">
-          Review next step of this tutorial.
-        </a>
-      </div>
-    </main>
-  );
+    <BrowserRouter>
+      <Routes>
+        <Route element={<DashboardLayout />}>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+
+        {/* <Route element={<AuthLayout />}>
+        </Route> */}
+
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  )
 }
 
-export default App;
+export default App
