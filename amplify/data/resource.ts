@@ -11,12 +11,15 @@ const schema = a.schema({
       email: a.email().required(),
       username: a.string().required(),
       location: a.string(),
+      posts: a.hasMany('Post', 'userId')
     })
     .authorization((allow) => [
       allow.ownerDefinedIn("profileOwner"),
     ]),
   Post: a
     .model({
+      userId: a.id(),
+      user: a.belongsTo('User', 'userId'),
       content: a.string().required(),
       images: a.url().array(),
       code: a.string(),
