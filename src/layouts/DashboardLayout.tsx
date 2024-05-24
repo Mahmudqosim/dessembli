@@ -38,6 +38,9 @@ const DashboardLayout = () => {
   }, [])
 
   const handleSignOut = async () => {
+    
+    console.log(user, loading)
+    
     await signOut()
   }
 
