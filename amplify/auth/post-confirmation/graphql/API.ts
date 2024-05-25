@@ -11,6 +11,7 @@ export type Comment = {
   post?: Post | null,
   postId?: string | null,
   updatedAt: string,
+  user?: UserDetails | null,
 };
 
 export type Post = {
@@ -19,17 +20,31 @@ export type Post = {
   comments?: ModelCommentConnection | null,
   content: string,
   createdAt: string,
+  createdBy?: UserDetails | null,
   id: string,
   images?: Array< string | null > | null,
   likes?: Array< string | null > | null,
   owner?: string | null,
   updatedAt: string,
+  user?: User | null,
+  userId?: string | null,
 };
 
 export type ModelCommentConnection = {
   __typename: "ModelCommentConnection",
   items:  Array<Comment | null >,
   nextToken?: string | null,
+};
+
+export type UserDetails = {
+  __typename: "UserDetails",
+  bio?: string | null,
+  coverImage?: string | null,
+  email: string,
+  location?: string | null,
+  name: string,
+  profilePicture?: string | null,
+  username: string,
 };
 
 export type User = {
@@ -40,10 +55,18 @@ export type User = {
   email: string,
   id: string,
   location?: string | null,
-  profileOwner?: string | null,
+  name: string,
+  owner?: string | null,
+  posts?: ModelPostConnection | null,
   profilePicture?: string | null,
   updatedAt: string,
   username: string,
+};
+
+export type ModelPostConnection = {
+  __typename: "ModelPostConnection",
+  items:  Array<Post | null >,
+  nextToken?: string | null,
 };
 
 export type ModelCommentFilterInput = {
@@ -126,12 +149,7 @@ export type ModelPostFilterInput = {
   or?: Array< ModelPostFilterInput | null > | null,
   owner?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
-};
-
-export type ModelPostConnection = {
-  __typename: "ModelPostConnection",
-  items:  Array<Post | null >,
-  nextToken?: string | null,
+  userId?: ModelIDInput | null,
 };
 
 export type ModelUserFilterInput = {
@@ -142,9 +160,10 @@ export type ModelUserFilterInput = {
   email?: ModelStringInput | null,
   id?: ModelIDInput | null,
   location?: ModelStringInput | null,
+  name?: ModelStringInput | null,
   not?: ModelUserFilterInput | null,
   or?: Array< ModelUserFilterInput | null > | null,
-  profileOwner?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   profilePicture?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   username?: ModelStringInput | null,
@@ -171,6 +190,17 @@ export type CreateCommentInput = {
   content: string,
   id?: string | null,
   postId?: string | null,
+  user?: UserDetailsInput | null,
+};
+
+export type UserDetailsInput = {
+  bio?: string | null,
+  coverImage?: string | null,
+  email: string,
+  location?: string | null,
+  name: string,
+  profilePicture?: string | null,
+  username: string,
 };
 
 export type ModelPostConditionInput = {
@@ -184,14 +214,17 @@ export type ModelPostConditionInput = {
   or?: Array< ModelPostConditionInput | null > | null,
   owner?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
+  userId?: ModelIDInput | null,
 };
 
 export type CreatePostInput = {
   code?: string | null,
   content: string,
+  createdBy?: UserDetailsInput | null,
   id?: string | null,
   images?: Array< string | null > | null,
   likes?: Array< string | null > | null,
+  userId?: string | null,
 };
 
 export type ModelUserConditionInput = {
@@ -201,9 +234,10 @@ export type ModelUserConditionInput = {
   createdAt?: ModelStringInput | null,
   email?: ModelStringInput | null,
   location?: ModelStringInput | null,
+  name?: ModelStringInput | null,
   not?: ModelUserConditionInput | null,
   or?: Array< ModelUserConditionInput | null > | null,
-  profileOwner?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   profilePicture?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   username?: ModelStringInput | null,
@@ -215,7 +249,7 @@ export type CreateUserInput = {
   email: string,
   id?: string | null,
   location?: string | null,
-  profileOwner?: string | null,
+  name: string,
   profilePicture?: string | null,
   username: string,
 };
@@ -236,14 +270,17 @@ export type UpdateCommentInput = {
   content?: string | null,
   id: string,
   postId?: string | null,
+  user?: UserDetailsInput | null,
 };
 
 export type UpdatePostInput = {
   code?: string | null,
   content?: string | null,
+  createdBy?: UserDetailsInput | null,
   id: string,
   images?: Array< string | null > | null,
   likes?: Array< string | null > | null,
+  userId?: string | null,
 };
 
 export type UpdateUserInput = {
@@ -252,7 +289,7 @@ export type UpdateUserInput = {
   email?: string | null,
   id: string,
   location?: string | null,
-  profileOwner?: string | null,
+  name?: string | null,
   profilePicture?: string | null,
   username?: string | null,
 };
@@ -309,6 +346,7 @@ export type ModelSubscriptionPostFilterInput = {
   or?: Array< ModelSubscriptionPostFilterInput | null > | null,
   owner?: ModelStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
+  userId?: ModelSubscriptionIDInput | null,
 };
 
 export type ModelSubscriptionUserFilterInput = {
@@ -319,8 +357,9 @@ export type ModelSubscriptionUserFilterInput = {
   email?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   location?: ModelSubscriptionStringInput | null,
+  name?: ModelSubscriptionStringInput | null,
   or?: Array< ModelSubscriptionUserFilterInput | null > | null,
-  profileOwner?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
   profilePicture?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   username?: ModelSubscriptionStringInput | null,
@@ -347,9 +386,20 @@ export type GetCommentQuery = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -367,11 +417,36 @@ export type GetPostQuery = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
@@ -388,7 +463,12 @@ export type GetUserQuery = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,
@@ -436,6 +516,7 @@ export type ListPostsQuery = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null >,
     nextToken?: string | null,
   } | null,
@@ -458,7 +539,8 @@ export type ListUsersQuery = {
       email: string,
       id: string,
       location?: string | null,
-      profileOwner?: string | null,
+      name: string,
+      owner?: string | null,
       profilePicture?: string | null,
       updatedAt: string,
       username: string,
@@ -489,9 +571,20 @@ export type CreateCommentMutation = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -510,11 +603,36 @@ export type CreatePostMutation = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
@@ -532,7 +650,12 @@ export type CreateUserMutation = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,
@@ -561,9 +684,20 @@ export type DeleteCommentMutation = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -582,11 +716,36 @@ export type DeletePostMutation = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
@@ -604,7 +763,12 @@ export type DeleteUserMutation = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,
@@ -633,9 +797,20 @@ export type UpdateCommentMutation = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -654,11 +829,36 @@ export type UpdatePostMutation = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
@@ -676,7 +876,12 @@ export type UpdateUserMutation = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,
@@ -705,9 +910,20 @@ export type OnCreateCommentSubscription = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -726,17 +942,42 @@ export type OnCreatePostSubscription = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
 export type OnCreateUserSubscriptionVariables = {
   filter?: ModelSubscriptionUserFilterInput | null,
-  profileOwner?: string | null,
+  owner?: string | null,
 };
 
 export type OnCreateUserSubscription = {
@@ -748,7 +989,12 @@ export type OnCreateUserSubscription = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,
@@ -777,9 +1023,20 @@ export type OnDeleteCommentSubscription = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -798,17 +1055,42 @@ export type OnDeletePostSubscription = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
 export type OnDeleteUserSubscriptionVariables = {
   filter?: ModelSubscriptionUserFilterInput | null,
-  profileOwner?: string | null,
+  owner?: string | null,
 };
 
 export type OnDeleteUserSubscription = {
@@ -820,7 +1102,12 @@ export type OnDeleteUserSubscription = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,
@@ -849,9 +1136,20 @@ export type OnUpdateCommentSubscription = {
       likes?: Array< string | null > | null,
       owner?: string | null,
       updatedAt: string,
+      userId?: string | null,
     } | null,
     postId?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
   } | null,
 };
 
@@ -870,17 +1168,42 @@ export type OnUpdatePostSubscription = {
     } | null,
     content: string,
     createdAt: string,
+    createdBy?:  {
+      __typename: "UserDetails",
+      bio?: string | null,
+      coverImage?: string | null,
+      email: string,
+      location?: string | null,
+      name: string,
+      profilePicture?: string | null,
+      username: string,
+    } | null,
     id: string,
     images?: Array< string | null > | null,
     likes?: Array< string | null > | null,
     owner?: string | null,
     updatedAt: string,
+    user?:  {
+      __typename: "User",
+      bio?: string | null,
+      coverImage?: string | null,
+      createdAt: string,
+      email: string,
+      id: string,
+      location?: string | null,
+      name: string,
+      owner?: string | null,
+      profilePicture?: string | null,
+      updatedAt: string,
+      username: string,
+    } | null,
+    userId?: string | null,
   } | null,
 };
 
 export type OnUpdateUserSubscriptionVariables = {
   filter?: ModelSubscriptionUserFilterInput | null,
-  profileOwner?: string | null,
+  owner?: string | null,
 };
 
 export type OnUpdateUserSubscription = {
@@ -892,7 +1215,12 @@ export type OnUpdateUserSubscription = {
     email: string,
     id: string,
     location?: string | null,
-    profileOwner?: string | null,
+    name: string,
+    owner?: string | null,
+    posts?:  {
+      __typename: "ModelPostConnection",
+      nextToken?: string | null,
+    } | null,
     profilePicture?: string | null,
     updatedAt: string,
     username: string,

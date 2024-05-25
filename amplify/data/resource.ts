@@ -1,59 +1,73 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
-import { postConfirmation } from "../auth/post-confirmation/resource";
+import { type ClientSchema, a, defineData } from "@aws-amplify/backend"
+import { postConfirmation } from "../auth/post-confirmation/resource"
 
-const schema = a.schema({
-  User: a
-    .model({
-      profileOwner: a.string(),
+const schema = a
+  .schema({
+    UserDetails: a.customType({
       bio: a.string(),
       profilePicture: a.url(),
       coverImage: a.url(),
       email: a.email().required(),
       username: a.string().required(),
       location: a.string(),
-      posts: a.hasMany('Post', 'userId')
-    })
-    .authorization((allow) => [
-      allow.ownerDefinedIn("profileOwner"),
-    ]),
-  Post: a
-    .model({
-      userId: a.id(),
-      user: a.belongsTo('User', 'userId'),
-      content: a.string().required(),
-      images: a.url().array(),
-      code: a.string(),
-      comments: a.hasMany('Comment', "postId"),
-      likes: a.string().array()
-    })
-    .authorization((allow) => [
-      allow.publicApiKey().to(["read"]),
-      allow.owner(),
-    ]),
-  Comment: a
-    .model({
-      content: a.string().required(),
-      postId: a.id(),
-      post: a.belongsTo('Post', 'postId')
-    })
-    .authorization((allow) => [
-      allow.publicApiKey().to(["read"]),
-      allow.owner(),
-    ]),
-}).authorization((allow) => [allow.resource(postConfirmation)]);
+      name: a.string().required()
+    }),
+    User: a
+      .model({
+        bio: a.string(),
+        profilePicture: a.url(),
+        coverImage: a.url(),
+        email: a.email().required(),
+        username: a.string().required(),
+        location: a.string(),
+        posts: a.hasMany("Post", "userId"),
+        name: a.string().required()
+      })
+      .authorization((allow) => [
+        allow.publicApiKey().to(["read"]),
+        allow.owner(),
+      ]),
+    Post: a
+      .model({
+        userId: a.id(),
+        user: a.belongsTo("User", "userId"),
+        content: a.string().required(),
+        images: a.url().array(),
+        code: a.string(),
+        comments: a.hasMany("Comment", "postId"),
+        likes: a.string().array(),
+        createdBy: a.ref('UserDetails')
+      })
+      .authorization((allow) => [
+        allow.publicApiKey().to(["read"]),
+        allow.owner(),
+      ]),
+    Comment: a
+      .model({
+        content: a.string().required(),
+        postId: a.id(),
+        post: a.belongsTo("Post", "postId"),
+        user: a.ref('UserDetails')
+      })
+      .authorization((allow) => [
+        allow.publicApiKey().to(["read"]),
+        allow.owner(),
+      ]),
+  })
+  .authorization((allow) => [allow.resource(postConfirmation)])
 
-export type Schema = ClientSchema<typeof schema>;
+export type Schema = ClientSchema<typeof schema>
 
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: "apiKey",
+    defaultAuthorizationMode: "userPool",
     // API Key is used for a.allow.public() rules
     apiKeyAuthorizationMode: {
       expiresInDays: 30,
     },
   },
-});
+})
 
 /*== STEP 2 ===============================================================
 Go to your frontend source code. From your client-side code, generate a

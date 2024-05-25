@@ -26,10 +26,21 @@ export const createComment = /* GraphQL */ `mutation CreateComment(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -49,11 +60,36 @@ export const createPost = /* GraphQL */ `mutation CreatePost(
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -72,7 +108,12 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username
@@ -101,10 +142,21 @@ export const deleteComment = /* GraphQL */ `mutation DeleteComment(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -124,11 +176,36 @@ export const deletePost = /* GraphQL */ `mutation DeletePost(
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -147,7 +224,12 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username
@@ -176,10 +258,21 @@ export const updateComment = /* GraphQL */ `mutation UpdateComment(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -199,11 +292,36 @@ export const updatePost = /* GraphQL */ `mutation UpdatePost(
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -222,7 +340,12 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username

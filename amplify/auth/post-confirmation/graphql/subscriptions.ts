@@ -26,10 +26,21 @@ export const onCreateComment = /* GraphQL */ `subscription OnCreateComment(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -49,11 +60,36 @@ export const onCreatePost = /* GraphQL */ `subscription OnCreatePost(
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -63,16 +99,21 @@ export const onCreatePost = /* GraphQL */ `subscription OnCreatePost(
 >;
 export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
   $filter: ModelSubscriptionUserFilterInput
-  $profileOwner: String
+  $owner: String
 ) {
-  onCreateUser(filter: $filter, profileOwner: $profileOwner) {
+  onCreateUser(filter: $filter, owner: $owner) {
     bio
     coverImage
     createdAt
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username
@@ -101,10 +142,21 @@ export const onDeleteComment = /* GraphQL */ `subscription OnDeleteComment(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -124,11 +176,36 @@ export const onDeletePost = /* GraphQL */ `subscription OnDeletePost(
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -138,16 +215,21 @@ export const onDeletePost = /* GraphQL */ `subscription OnDeletePost(
 >;
 export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
   $filter: ModelSubscriptionUserFilterInput
-  $profileOwner: String
+  $owner: String
 ) {
-  onDeleteUser(filter: $filter, profileOwner: $profileOwner) {
+  onDeleteUser(filter: $filter, owner: $owner) {
     bio
     coverImage
     createdAt
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username
@@ -176,10 +258,21 @@ export const onUpdateComment = /* GraphQL */ `subscription OnUpdateComment(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -199,11 +292,36 @@ export const onUpdatePost = /* GraphQL */ `subscription OnUpdatePost(
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -213,16 +331,21 @@ export const onUpdatePost = /* GraphQL */ `subscription OnUpdatePost(
 >;
 export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
   $filter: ModelSubscriptionUserFilterInput
-  $profileOwner: String
+  $owner: String
 ) {
-  onUpdateUser(filter: $filter, profileOwner: $profileOwner) {
+  onUpdateUser(filter: $filter, owner: $owner) {
     bio
     coverImage
     createdAt
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username

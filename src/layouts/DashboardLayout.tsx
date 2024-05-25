@@ -1,7 +1,9 @@
-import { Outlet } from "react-router-dom"
-import { Flex, Authenticator, Button } from "@aws-amplify/ui-react"
-import { useEffect, useState } from "react"
+import { Authenticator, Button, Flex, Image } from "@aws-amplify/ui-react"
 import { getCurrentUser, signOut } from "aws-amplify/auth"
+import { useEffect, useState } from "react"
+import { Outlet } from "react-router-dom"
+import { amplifyClient } from "../amplifyClient"
+import dessembliLogo from "../assets/dessembli.svg"
 import Navbar from "../components/Navbar"
 
 export interface USER_TYPE {
@@ -20,6 +22,10 @@ const DashboardLayout = () => {
       try {
         const { username, userId } = await getCurrentUser()
 
+        const { data: user, errors } = await amplifyClient.models.Post.list()
+
+        console.log(user, errors)
+
         setUser({
           username,
           userId,
@@ -37,24 +43,25 @@ const DashboardLayout = () => {
     fetchUser()
   }, [])
 
+
   const handleSignOut = async () => {
-    
     console.log(user, loading)
-    
+
     await signOut()
   }
 
   if (isAuthenticated !== null && !isAuthenticated) {
     return (
-      <Flex alignItems="center" justifyContent="center" paddingTop="10rem">
-        <Authenticator />
+      <Flex alignItems="center" direction={"column"} gap="2rem" justifyContent="center" paddingTop="8rem" paddingBottom="5rem">
+        <Image src={dessembliLogo} alt="Dessembli" height="3rem" />
+        <Authenticator signUpAttributes={['name']} className="auth-wrapper" />
       </Flex>
     )
   }
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <Flex>
         <Button onClick={handleSignOut}>Sign Out</Button>
       </Flex>

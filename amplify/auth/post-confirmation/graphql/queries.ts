@@ -23,10 +23,21 @@ export const getComment = /* GraphQL */ `query GetComment($id: ID!) {
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     postId
     updatedAt
+    user {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     __typename
   }
 }
@@ -43,11 +54,36 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
     }
     content
     createdAt
+    createdBy {
+      bio
+      coverImage
+      email
+      location
+      name
+      profilePicture
+      username
+      __typename
+    }
     id
     images
     likes
     owner
     updatedAt
+    user {
+      bio
+      coverImage
+      createdAt
+      email
+      id
+      location
+      name
+      owner
+      profilePicture
+      updatedAt
+      username
+      __typename
+    }
+    userId
     __typename
   }
 }
@@ -60,7 +96,12 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
     email
     id
     location
-    profileOwner
+    name
+    owner
+    posts {
+      nextToken
+      __typename
+    }
     profilePicture
     updatedAt
     username
@@ -106,6 +147,7 @@ export const listPosts = /* GraphQL */ `query ListPosts(
       likes
       owner
       updatedAt
+      userId
       __typename
     }
     nextToken
@@ -126,7 +168,8 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       email
       id
       location
-      profileOwner
+      name
+      owner
       profilePicture
       updatedAt
       username

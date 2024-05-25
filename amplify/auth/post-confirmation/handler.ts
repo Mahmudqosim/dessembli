@@ -44,9 +44,9 @@ export const handler: PostConfirmationTriggerHandler = async (event) => {
     variables: {
       input: {
         email: event.request.userAttributes.email,
-        profileOwner: `${event.request.userAttributes.sub}::${event.userName}`,
-        username: event.userName,
+        username: event.request.userAttributes.email.split('@')[0].concat(event.userName.substring(0, 5)),
         profilePicture:  gravatar(event.request.userAttributes.email),
+        name: event.request.userAttributes.name
       },
     },
   });
