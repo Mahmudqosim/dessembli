@@ -78,6 +78,7 @@ export const getPost = /* GraphQL */ `query GetPost($id: ID!) {
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -102,6 +103,7 @@ export const getUser = /* GraphQL */ `query GetUser($id: ID!) {
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username
@@ -170,6 +172,7 @@ export const listUsers = /* GraphQL */ `query ListUsers(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username

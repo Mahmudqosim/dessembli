@@ -84,6 +84,7 @@ export const onCreatePost = /* GraphQL */ `subscription OnCreatePost(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -114,6 +115,7 @@ export const onCreateUser = /* GraphQL */ `subscription OnCreateUser(
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username
@@ -200,6 +202,7 @@ export const onDeletePost = /* GraphQL */ `subscription OnDeletePost(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -230,6 +233,7 @@ export const onDeleteUser = /* GraphQL */ `subscription OnDeleteUser(
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username
@@ -316,6 +320,7 @@ export const onUpdatePost = /* GraphQL */ `subscription OnUpdatePost(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -346,6 +351,7 @@ export const onUpdateUser = /* GraphQL */ `subscription OnUpdateUser(
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username

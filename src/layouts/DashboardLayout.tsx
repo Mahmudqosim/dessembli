@@ -25,10 +25,9 @@ const DashboardLayout = () => {
         if (userId) {
           console.log(userId)
           
-          const { data: user, errors } = await amplifyClient.models.User.get(
-            { id: userId },
-            { authMode: "userPool" }
-          )
+          const { data: user, errors } = await amplifyClient.models.User.list({
+            authMode: 'identityPool'
+          })
           
           console.log(user, errors)
         }

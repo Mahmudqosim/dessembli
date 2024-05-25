@@ -21,10 +21,12 @@ const schema = a
         username: a.string().required(),
         location: a.string(),
         posts: a.hasMany("Post", "userId"),
-        name: a.string().required()
+        name: a.string().required(),
+        profileOwner: a.string().required()
       })
       .authorization((allow) => [
-        allow.publicApiKey().to(["read"]),
+        allow.ownerDefinedIn('profileOwner'),
+        allow.guest().to(["read"]),
         allow.owner(),
       ]),
     Post: a
@@ -39,7 +41,7 @@ const schema = a
         createdBy: a.ref('UserDetails')
       })
       .authorization((allow) => [
-        allow.publicApiKey().to(["read"]),
+        allow.guest().to(["read"]),
         allow.owner(),
       ]),
     Comment: a
@@ -50,7 +52,7 @@ const schema = a
         user: a.ref('UserDetails')
       })
       .authorization((allow) => [
-        allow.publicApiKey().to(["read"]),
+        allow.guest().to(["read"]),
         allow.owner(),
       ]),
   })

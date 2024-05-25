@@ -84,6 +84,7 @@ export const createPost = /* GraphQL */ `mutation CreatePost(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -114,6 +115,7 @@ export const createUser = /* GraphQL */ `mutation CreateUser(
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username
@@ -200,6 +202,7 @@ export const deletePost = /* GraphQL */ `mutation DeletePost(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -230,6 +233,7 @@ export const deleteUser = /* GraphQL */ `mutation DeleteUser(
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username
@@ -316,6 +320,7 @@ export const updatePost = /* GraphQL */ `mutation UpdatePost(
       location
       name
       owner
+      profileOwner
       profilePicture
       updatedAt
       username
@@ -346,6 +351,7 @@ export const updateUser = /* GraphQL */ `mutation UpdateUser(
       nextToken
       __typename
     }
+    profileOwner
     profilePicture
     updatedAt
     username
