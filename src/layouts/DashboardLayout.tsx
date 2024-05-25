@@ -22,9 +22,16 @@ const DashboardLayout = () => {
       try {
         const { username, userId } = await getCurrentUser()
 
-        const { data: user, errors } = await amplifyClient.models.Post.list()
-
-        console.log(user, errors)
+        if (userId) {
+          console.log(userId)
+          
+          const { data: user, errors } = await amplifyClient.models.User.get(
+            { id: userId },
+            { authMode: "userPool" }
+          )
+          
+          console.log(user, errors)
+        }
 
         setUser({
           username,
@@ -43,7 +50,6 @@ const DashboardLayout = () => {
     fetchUser()
   }, [])
 
-
   const handleSignOut = async () => {
     console.log(user, loading)
 
@@ -52,9 +58,16 @@ const DashboardLayout = () => {
 
   if (isAuthenticated !== null && !isAuthenticated) {
     return (
-      <Flex alignItems="center" direction={"column"} gap="2rem" justifyContent="center" paddingTop="8rem" paddingBottom="5rem">
+      <Flex
+        alignItems="center"
+        direction={"column"}
+        gap="2rem"
+        justifyContent="center"
+        paddingTop="8rem"
+        paddingBottom="5rem"
+      >
         <Image src={dessembliLogo} alt="Dessembli" height="3rem" />
-        <Authenticator signUpAttributes={['name']} className="auth-wrapper" />
+        <Authenticator signUpAttributes={["name"]} className="auth-wrapper" />
       </Flex>
     )
   }
